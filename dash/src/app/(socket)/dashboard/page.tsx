@@ -203,16 +203,6 @@ export default function Page() {
 
 			<div className={clsx("flex w-full flex-col divide-y divide-zinc-800")}>
 				<div className={clsx("flex w-full flex-col divide-y divide-zinc-800", "xl:flex-row xl:divide-x xl:divide-y-0")}>
-					<div className={clsx("mb-2 overflow-x-auto md:overflow-visible", " xl:flex-[0,0,auto]")}>
-						<LeaderBoard
-							drivers={state?.driverList}
-							driversTiming={state?.timingData}
-							driversTimingStats={state?.timingStats}
-							driversAppTiming={state?.timingAppData}
-							carsData={carsData}
-						/>
-					</div>
-
 					<div className={clsx("flex flex-col divide-y divide-zinc-800", "xl:min-w-0 xl:flex-grow")}>
 						{state?.sessionInfo?.type === "Qualifying" && (
 							<div className="overflow-x-auto">
@@ -269,6 +259,15 @@ export default function Page() {
 								/>
 							</div>
 						</div>
+					</div>
+					<div className={clsx("mb-2 overflow-x-auto md:overflow-visible", " xl:flex-[0,0,auto]")}>
+						<LeaderBoard
+							drivers={state?.driverList}
+							driversTiming={state?.timingData}
+							driversTimingStats={state?.timingStats}
+							driversAppTiming={state?.timingAppData}
+							carsData={carsData}
+						/>
 					</div>
 				</div>
 
