@@ -73,7 +73,7 @@ export default function Driver({
 						: "5.5rem 4rem 5.5rem 4rem 5rem 5.5rem auto",
 				}}
 			>
-				<DriverTag className="!min-w-full" short={driver.tla} teamColor={driver.teamColour} position={position} />
+				<DriverTag className="!min-w-full" headShotUrl={driver.headshotUrl} short={driver.tla} teamColor={driver.teamColour} position={position} />
 				<DriverDRS
 					on={carData ? hasDRS(carData[45]) : false}
 					possible={carData ? possibleDRS(carData[45]) : false}
