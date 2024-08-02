@@ -42,6 +42,14 @@ export default function Menubar() {
 		setLiveWarning([false, null]);
 	};
 
+	const collapseMenu = () => {
+		const menuBarContainer = document.getElementById("menuBarContainerId");
+		if(menuBarContainer != null)
+		{
+			menuBarContainer.style.display = "none";
+		}
+	};
+
 	useEffect(() => {
 		router.prefetch("/");
 		router.prefetch("/dashboard");
@@ -67,6 +75,9 @@ export default function Menubar() {
 			</motion.a>
 			<motion.a className="cursor-pointer" whileTap={{ scale: 0.95 }} onClick={() => liveTimingGuard("/help")}>
 				Help
+			</motion.a>
+			<motion.a className="cursor-pointer" whileTap={{ scale: 0.95 }} onClick={() => collapseMenu()}>
+				Collapse
 			</motion.a>
 
 			{onLiveRoute && (
