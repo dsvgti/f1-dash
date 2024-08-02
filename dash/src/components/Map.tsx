@@ -293,6 +293,7 @@ export default function Map({
 						<CarDot
 							key={`map.car.241`}
 							name="Safety Car"
+							headShotUrl=""
 							pit={false}
 							hidden={false}
 							pos={positions["241"]}
@@ -317,6 +318,7 @@ export default function Map({
 								<CarDot
 									key={`map.driver.${driver.racingNumber}`}
 									name={driver.tla}
+									headShotUrl={driver.headshotUrl}
 									color={driver.teamColour}
 									pit={pit}
 									hidden={hidden}
@@ -335,6 +337,7 @@ export default function Map({
 
 type CarDotProps = {
 	name: string;
+	headShotUrl?: string;
 	color: string | undefined;
 
 	pit: boolean;
@@ -347,7 +350,7 @@ type CarDotProps = {
 	centerY: number;
 };
 
-const CarDot = ({ pos, name, color, pit, hidden, rotation, centerX, centerY }: CarDotProps) => {
+const CarDot = ({ pos, name, headShotUrl, color, pit, hidden, rotation, centerX, centerY }: CarDotProps) => {
 	const rotatedPos = rotate(pos.X, pos.Y, rotation, centerX, centerY);
 	const transform = [`translateX(${rotatedPos.x}px)`, `translateY(${rotatedPos.y}px)`].join(" ");
 
@@ -361,6 +364,7 @@ const CarDot = ({ pos, name, color, pit, hidden, rotation, centerX, centerY }: C
 			}}
 		>
 			<circle id={`map.driver.circle`} r={120} />
+			{headShotUrl != null && headShotUrl != "" && <image x="0" y="0" width="1000" height="1000" preserveAspectRatio="none" xlinkHref={headShotUrl} />}
 			<text
 				id={`map.driver.text`}
 				fontWeight="bold"
