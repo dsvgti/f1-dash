@@ -38,7 +38,7 @@ export default function Page() {
 						<p className="flex items-center gap-1">
 							<span className="size-4 rounded-md bg-white ml-2" /> <small>White</small>
 						</p>
-						<p className="mr-4 mt-2.5"><div className="flex flex-row"><small>last lap time</small></div></p>
+						<p className="mr-4 mt-2.5"><small>last lap time</small></p>
 					</div>
 
 					<div className="flex gap-1">
