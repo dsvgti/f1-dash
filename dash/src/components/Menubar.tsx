@@ -43,10 +43,12 @@ export default function Menubar() {
 	};
 
 	const collapseMenu = () => {
-		const menuBarContainer = document.getElementById("menuBarContainerId");
-		if(menuBarContainer != null)
+		const menuBarContainerList = Array.from(document.getElementsByClassName("menuBarContainerId") as  HTMLCollectionOf<HTMLElement>);
+		if(menuBarContainerList != null)
 		{
-			menuBarContainer.style.display = "none";
+			menuBarContainerList.forEach(element => {
+				element.style.display = "none";
+			}); 
 		}
 	};
 

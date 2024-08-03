@@ -93,7 +93,7 @@ const SubLayout = ({ children }: Props) => {
 
 	return (
 		<div className="w-full">
-			<div id="menuBarContainerId" className="grid grid-cols-1 items-center gap-4 border-b border-zinc-800 bg-black p-2 md:grid-cols-2">
+			<div className="grid grid-cols-1 items-center gap-4 border-b border-zinc-800 bg-black p-2 md:grid-cols-2 menuBarContainerId">
 				<Menubar />
 				
 				<div className="flex items-center gap-2 sm:hidden">
