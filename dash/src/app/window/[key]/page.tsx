@@ -57,6 +57,7 @@ export default function SubWindow({ params: { key } }: Props) {
 					positions={positions}
 					trackStatus={state?.trackStatus}
 					raceControlMessages={state?.raceControlMessages?.messages}
+					carsData={_carsData}
 				/>
 			)}
 

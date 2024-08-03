@@ -222,6 +222,7 @@ export default function Page() {
 								timingDrivers={state?.timingData}
 								trackStatus={state?.trackStatus}
 								raceControlMessages={state?.raceControlMessages?.messages}
+								carsData={carsData}
 							/>
 						</div>
 
@@ -279,6 +280,7 @@ export default function Page() {
 						timingDrivers={state?.timingData}
 						trackStatus={state?.trackStatus}
 						raceControlMessages={state?.raceControlMessages?.messages}
+						carsData={carsData}
 					/>
 				</div>
 			</div>

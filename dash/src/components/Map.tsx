@@ -8,6 +8,7 @@ import {
 	Message as RaceControlMessage,
 	Positions,
 	PositionCar,
+	CarsData,
 } from "@/types/state.type";
 
 import { objectEntries } from "@/lib/driverHelper";
@@ -27,6 +28,7 @@ type Props = {
 
 	trackStatus: TrackStatus | undefined;
 	raceControlMessages: RaceControlMessage[] | undefined;
+	carsData?: CarsData | null;
 };
 
 const space = 1000;
@@ -159,6 +161,7 @@ export default function Map({
 	trackStatus,
 	raceControlMessages,
 	positions,
+	carsData,
 }: Props) {
 	const [points, setPoints] = useState<null | { x: number; y: number }[]>(null);
 	const [sectors, setSectors] = useState<Sector[]>([]);
@@ -293,6 +296,7 @@ export default function Map({
 						<CarDot
 							key={`map.car.241`}
 							name="Safety Car"
+							racingNumber="241"
 							headShotUrl=""
 							pit={false}
 							hidden={false}
@@ -301,6 +305,7 @@ export default function Map({
 							rotation={rotation}
 							centerX={centerX}
 							centerY={centerY}
+							carsData={carsData}
 						/>
 					)}
 
@@ -318,6 +323,7 @@ export default function Map({
 								<CarDot
 									key={`map.driver.${driver.racingNumber}`}
 									name={driver.tla}
+									racingNumber={driver.racingNumber}
 									headShotUrl={driver.headshotUrl}
 									color={driver.teamColour}
 									pit={pit}
@@ -326,6 +332,7 @@ export default function Map({
 									rotation={rotation}
 									centerX={centerX}
 									centerY={centerY}
+									carsData={carsData}
 								/>
 							);
 						})}
@@ -337,6 +344,7 @@ export default function Map({
 
 type CarDotProps = {
 	name: string;
+	racingNumber:string;
 	headShotUrl?: string;
 	color: string | undefined;
 
@@ -348,9 +356,10 @@ type CarDotProps = {
 
 	centerX: number;
 	centerY: number;
+	carsData?: CarsData | null;
 };
 
-const CarDot = ({ pos, name, headShotUrl, color, pit, hidden, rotation, centerX, centerY }: CarDotProps) => {
+const CarDot = ({ pos, name, racingNumber, headShotUrl, color, pit, hidden, rotation, centerX, centerY, carsData }: CarDotProps) => {
 	const rotatedPos = rotate(pos.X, pos.Y, rotation, centerX, centerY);
 	const transform = [`translateX(${rotatedPos.x}px)`, `translateY(${rotatedPos.y}px)`].join(" ");
 
@@ -374,6 +383,16 @@ const CarDot = ({ pos, name, headShotUrl, color, pit, hidden, rotation, centerX,
 				}}
 			>
 				{name}
+			</text>
+			<text
+				id={`map.driver.text2`}
+				fontWeight="bold"
+				fontSize={120 * 3}
+				style={{
+					transform: "translateX(150px) translateY(-550px)",
+				}}
+			>
+				{"("+(carsData ? carsData[racingNumber].Channels[2] : "")+"km/h)"}
 			</text>
 		</g>
 	);
