@@ -20,6 +20,8 @@ import { getTrackStatusMessage } from "@/lib/getTrackStatusMessage";
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
 
+import { useMode } from "@/context/ModeContext";
+
 type Props = {
 	circuitKey: number | undefined;
 	drivers: DriverList | undefined;
@@ -154,6 +156,12 @@ const priorizeColoredSectors = (a: RenderedSector, b: RenderedSector) => {
 
 const rotationFIX = 90;
 
+type Corner = {
+	number: number;
+	pos: TrackPosition;
+	labelPos: TrackPosition;
+};
+
 export default function Map({
 	circuitKey,
 	drivers,
@@ -163,8 +171,12 @@ export default function Map({
 	positions,
 	carsData,
 }: Props) {
+	const { uiElements } = useMode();
+
 	const [points, setPoints] = useState<null | { x: number; y: number }[]>(null);
 	const [sectors, setSectors] = useState<Sector[]>([]);
+
+	const [corners, setCorners] = useState<Corner[]>([]);
 
 	const [rotation, setRotation] = useState<number>(0);
 
@@ -193,6 +205,22 @@ export default function Map({
 				};
 			});
 
+			const cornerPositions: Corner[] = mapJson.corners.map((corner) => {
+				const pos = rotate(corner.trackPosition.x, corner.trackPosition.y, fixedRotation, centerX, centerY);
+				const labelPos = rotate(
+					corner.trackPosition.x + 540 * Math.cos(rad(corner.angle)),
+					corner.trackPosition.y + 540 * Math.sin(rad(corner.angle)),
+					fixedRotation,
+					centerX,
+					centerY,
+				);
+				return {
+					number: corner.number,
+					pos,
+					labelPos,
+				};
+			});
+
 			const rotatedPoints = mapJson.x.map((x, index) => rotate(x, mapJson.y[index], fixedRotation, centerX, centerY));
 
 			const pointsX = rotatedPoints.map((item) => item.x);
@@ -208,6 +236,7 @@ export default function Map({
 			setSectors(sectors);
 			setPoints(rotatedPoints);
 			setRotation(fixedRotation);
+			setCorners(cornerPositions);
 		})();
 	}, [circuitKey]);
 
@@ -288,6 +317,16 @@ export default function Map({
 				);
 			})}
 
+			{uiElements.showCornerNumbers &&
+				corners.map((corner) => (
+					<CornerNumber
+						key={`corner.${corner.number}`}
+						number={corner.number}
+						x={corner.labelPos.x}
+						y={corner.labelPos.y}
+					/>
+				))}
+
 			{centerX && centerY && positions && drivers && (
 				<>
 					{/* 241 is safty car */}
@@ -341,6 +380,20 @@ export default function Map({
 		</svg>
 	);
 }
+
+type CornerNumberProps = {
+	number: number;
+	x: number;
+	y: number;
+};
+
+const CornerNumber: React.FC<CornerNumberProps> = ({ number, x, y }) => {
+	return (
+		<text x={x} y={y} className="fill-zinc-700" fontSize={300} fontWeight="semibold">
+			{number}
+		</text>
+	);
+};
 
 type CarDotProps = {
 	name: string;
