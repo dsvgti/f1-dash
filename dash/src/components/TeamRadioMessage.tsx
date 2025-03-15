@@ -90,7 +90,7 @@ export default function TeamRadioMessage({ driver, capture, basePath }: Props) {
 				}}
 			>
 				<div className="w-10 place-self-start">
-					<DriverTag teamColor={driver.teamColour} short={driver.tla} />
+					<DriverTag teamColor={driver.teamColour} headShotUrl={driver.headshotUrl} short={driver.tla} />
 				</div>
 
 				<div className="flex items-center gap-1">

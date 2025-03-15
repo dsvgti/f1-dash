@@ -5,9 +5,10 @@ type Props = {
 	short: string;
 	position?: number;
 	className?: string;
+	headShotUrl?: string;
 };
 
-export default function DriverTag({ position, teamColor, short, className }: Props) {
+export default function DriverTag({ position, teamColor, short, className, headShotUrl }: Props) {
 	return (
 		<div
 			id="walkthrough-driver-position"
@@ -18,11 +19,13 @@ export default function DriverTag({ position, teamColor, short, className }: Pro
 			style={{ backgroundColor: `#${teamColor}` }}
 		>
 			{position && <p className="px-1 text-xl leading-none">{position}</p>}
-
-			<div className="flex h-min w-min items-center justify-center rounded-md bg-white px-1">
-				<p className="font-mono text-zinc-600" style={{ ...(teamColor && { color: `#${teamColor}` }) }}>
-					{short}
-				</p>
+			<div className="flex">
+				{headShotUrl != null && headShotUrl != "" && <img src={headShotUrl} style={{marginLeft:"-12px"}} width="45px" height="45px"></img>}
+				<div className="flex h-min w-min items-center justify-center rounded-md bg-white px-1" style={{marginLeft:"-12px"}}>
+					<p className="font-mono text-zinc-600" style={{ ...(teamColor && { color: `#${teamColor}` }) }}>
+						{short}
+					</p>
+				</div>
 			</div>
 		</div>
 	);

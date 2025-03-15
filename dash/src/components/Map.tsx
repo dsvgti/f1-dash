@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 
-import type { PositionCar } from "@/types/state.type";
+import type { CarsData, PositionCar } from "@/types/state.type";
 import type { Map, TrackPosition } from "@/types/map.type";
 
 import { fetchMap } from "@/lib/fetchMap";
 import { objectEntries } from "@/lib/driverHelper";
-import { useDataStore, usePositionStore } from "@/stores/useDataStore";
+import { useCarDataStore, useDataStore, usePositionStore } from "@/stores/useDataStore";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { getTrackStatusMessage } from "@/lib/getTrackStatusMessage";
 import {
@@ -41,6 +41,7 @@ export default function Map() {
 	const timingDrivers = useDataStore((state) => state?.timingData);
 	const raceControlMessages = useDataStore((state) => state?.raceControlMessages?.messages);
 	const circuitKey = useDataStore((state) => state?.sessionInfo?.meeting.circuit.key);
+	const carData = useCarDataStore((state) => state?.carsData ? state.carsData : undefined);
 
 	const [[minX, minY, widthX, widthY], setBounds] = useState<(null | number)[]>([null, null, null, null]);
 	const [[centerX, centerY], setCenter] = useState<(null | number)[]>([null, null]);
@@ -186,6 +187,8 @@ export default function Map() {
 									key={`map.driver.${driver.racingNumber}`}
 									favoriteDriver={favoriteDrivers.length > 0 ? favoriteDrivers.includes(driver.racingNumber) : false}
 									name={driver.tla}
+									racingNumber={driver.racingNumber}
+									headShotUrl={driver.headshotUrl}
 									color={driver.teamColour}
 									pit={pit}
 									hidden={hidden}
@@ -193,6 +196,7 @@ export default function Map() {
 									rotation={rotation}
 									centerX={centerX}
 									centerY={centerY}
+									carsData={carData}
 								/>
 							);
 						})}
@@ -218,6 +222,8 @@ const CornerNumber: React.FC<CornerNumberProps> = ({ number, x, y }) => {
 
 type CarDotProps = {
 	name: string;
+	racingNumber:string | undefined;
+	headShotUrl?: string;
 	color: string | undefined;
 	favoriteDriver: boolean;
 
@@ -229,9 +235,10 @@ type CarDotProps = {
 
 	centerX: number;
 	centerY: number;
+	carsData?: CarsData | undefined;
 };
 
-const CarDot = ({ pos, name, color, favoriteDriver, pit, hidden, rotation, centerX, centerY }: CarDotProps) => {
+const CarDot = ({ pos, name, racingNumber, headShotUrl, color, favoriteDriver, pit, hidden, rotation, centerX, centerY, carsData }: CarDotProps) => {
 	const rotatedPos = rotate(pos.X, pos.Y, rotation, centerX, centerY);
 	const transform = [`translateX(${rotatedPos.x}px)`, `translateY(${rotatedPos.y}px)`].join(" ");
 
@@ -245,6 +252,7 @@ const CarDot = ({ pos, name, color, favoriteDriver, pit, hidden, rotation, cente
 			}}
 		>
 			<circle id={`map.driver.circle`} r={120} />
+			{headShotUrl != null && headShotUrl != "" && <image x="0" y="0" width="1000" height="1000" preserveAspectRatio="none" xlinkHref={headShotUrl} />}
 			<text
 				id={`map.driver.text`}
 				fontWeight="bold"
@@ -255,7 +263,16 @@ const CarDot = ({ pos, name, color, favoriteDriver, pit, hidden, rotation, cente
 			>
 				{name}
 			</text>
-
+			<text
+				id={`map.driver.text2`}
+				fontWeight="bold"
+				fontSize={120 * 3}
+				style={{
+					transform: "translateX(150px) translateY(-550px)",
+				}}
+			>
+				{racingNumber && "("+(carsData ? carsData[racingNumber].Channels[2] : "")+"km/h)"}
+			</text>
 			{favoriteDriver && (
 				<circle
 					id={`map.driver.favorite`}
